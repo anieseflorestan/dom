@@ -1,0 +1,171 @@
+/* Modo Escuro/Claro */
+
+const btnTema = document.querySelector("#btn-tema");
+
+btnTema.addEventListener('click', () => {
+
+    document.body.classList.toggle('dark');
+
+    const modoEscuro = document.body.classList.contains('dark');
+
+    btnTema.textContent = modoEscuro ? 'Modo Claro' : 'Modo Escuro';
+
+    console.log('Modo Escuro Ativado!');
+});
+
+/* Perfil Ocultar e Mostrar*/
+
+const btnToggleInfo = document.querySelector('#btn-toggle-info');
+const infoCorpo     = document.querySelector('#info-corpo');
+
+btnToggleInfo.addEventListener('click', () => {
+
+    const visivel = infoCorpo.style.display !== 'none';
+
+    if(visivel){
+        infoCorpo.style.display = 'none';
+        btnToggleInfo.textContent = 'Mostrar';
+    } else {
+        infoCorpo.style.display = 'block';
+        btnToggleInfo.textContent = 'Ocultar';
+    }
+
+    console.log(`Informações Visíveis ${!visivel}`);
+});
+
+/* Aumentar Habilidades em Javascript */
+const btnAumentarJS = document.querySelector('#btn-aumentar-js');
+const barraJS       = document.querySelector('#barra-js');
+const nivelJS       = document.querySelector('#nivel-js');
+
+btnAumentarJS.addEventListener('click', () => {
+    
+    const nivelAtual = parseInt(nivelJS.textContent);
+
+    if(nivelAtual >= 100) {
+        btnAumentarJS.textContent = 'Javascript Dominado!';
+        btnAumentarJS.disabled    = true;
+        return;
+    }
+
+    const novoNivel = Math.min(nivelAtual + 10, 100);
+
+    nivelJS.textContent = novoNivel + '%';
+    barraJS.style.width = novoNivel + '%';
+
+    console.log(`Nível JS Agora: ${novoNivel}%`);
+});
+
+/* Edição de Perfil */
+
+const btnEditarNome = document.querySelector('#btn-editar-nome');
+const formEdicao    = document.querySelector('#form-edicao');
+const inputNome     = document.querySelector('#input-nome');
+const inputProfissao = document.querySelector('#input-profissao');
+const nomeUsuario   = document.querySelector('#nome-usuario');
+const profissaoUsuario = document.querySelector('#profissao-usuario');
+
+btnEditarNome.addEventListener('click', () => {
+    formEdicao.style.display = 'block';
+
+    inputNome.value = nomeUsuario.textContent;
+    inputProfissao.value = profissaoUsuario.textContent;
+
+    console.log(`Formulário Aberto. Nome Atual: ${inputNome.value}`);
+});
+
+/* Salvar e Cancelar Alterações de Perfil*/
+const btnSalvar = document.querySelector('#btn-salvar');
+const btnCancelar = document.querySelector('#btn-cancelar');
+
+btnCancelar.addEventListener('click', () => {
+    formEdicao.style.display = 'none';
+    console.log("Edição Cancelada!");
+});
+
+btnSalvar.addEventListener('click', () => {
+    const novoNome = inputNome.value.trim();
+    const novaProfissao = inputProfissao.value.trim();
+
+    if(novoNome === ''){
+        alert('O nome não pode ser vazio! Tongão!');
+        return;
+    }
+
+    nomeUsuario.textContent = novoNome;
+    profissaoUsuario.textContent = novaProfissao || 'Sem Profissão';
+
+    formEdicao.style.display = 'none';
+
+    console.log(`Perfil salvo: ${novoNome} ${novaProfissao}`);
+});
+
+/* Troca de Foto de Perfil */
+
+const btnTrocarFoto = document.querySelector('#btn-trocar-foto');
+const fotoOpcoes    = document.querySelector('#foto-opcoes');
+const fotoPerfil    = document.querySelector('#foto-perfil');
+
+btnTrocarFoto.addEventListener('click', () => {
+    
+    if(fotoOpcoes.style.display === 'block'){
+        fotoOpcoes.style.display = 'none';
+    } else {
+        fotoOpcoes.style.display = 'block'
+        formEdicao.style.display = 'none';
+    }
+});
+
+const todasFotos = document.querySelectorAll('.foto-opcao');
+
+todasFotos.forEach(opcao => {
+    
+    opcao.addEventListener('click', () => {
+        const seed = opcao.dataset.seed;
+
+        fotoPerfil.src = `https://api.dicebear.com/7.x/adventurer/svg?seed=${seed}`;
+        
+        todasFotos.forEach(f => f.classList.remove('selecionada'));
+        opcao.classList.add('selecionada');
+
+        fotoOpcoes.style.display = 'none';
+
+        console.log(`Avatar trocado para: ${seed}`);
+    });
+});
+
+/* Verificar Conta e fazer upgrade  */
+
+const btnVerificar     = document.querySelector('#btn-verificar');
+const badgeVerificacao = document.querySelector('#badge-verificacao');
+const totalConexoes    = document.querySelector('#total-conexoes');
+
+btnVerificar.addEventListener('click', () => {
+    badgeVerificacao.className = 'badge badge-green';
+    badgeVerificacao.textContent = 'Verificado';
+
+    const atual = parseInt(totalConexoes.textContent);
+    totalConexoes.textContent = atual + 1;
+
+    btnVerificar.textContent = 'Conta Verificada';
+    btnVerificar.disabled    = true;
+});
+
+const btnUpgrade = document.querySelector('#btn-upgrade');
+const badgePlano = document.querySelector('#badge-plano');
+const statusBadge = document.querySelector('#status-badge');
+
+btnUpgrade.addEventListener('click', () => {
+    badgePlano.className = 'badge badge-purple';
+    badgePlano.textContent = 'Premium';
+
+    btnUpgrade.textContent = 'Plano Premium Ativado';
+    btnUpgrade.disabled = true;
+
+    const atual = parseInt(totalConexoes.textContent);
+    totalConexoes.textContent = atual + 50;
+
+    statusBadge.innerHTML = 'Premium';
+    statusBadge.style.background = '#faf5ff';
+    statusBadge.style.color = '#7c3aed';
+});
